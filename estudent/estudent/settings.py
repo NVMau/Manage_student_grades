@@ -69,6 +69,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'estudent.wsgi.application'
+AUTH_USER_MODEL = 'student.User'
 
 
 # Database

@@ -12,26 +12,22 @@ class ModelBase(models.Model):
         abstract = True
 
 class User(AbstractUser):
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
-    email = models.EmailField(unique=True)
     user_name = models.CharField(max_length=100)
-    password = models.CharField(max_length=128)
     birthDate = models.DateField(null=True)
     address = models.CharField(max_length=128)
 
     #them do loi xung dot
-    groups = models.ManyToManyField(
-        Group,
-        related_name="%(app_label)s_%(class)s_related",
-        related_query_name="%(app_label)s_%(class)ss"
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name="%(app_label)s_%(class)s_related",
-        related_query_name="%(app_label)s_%(class)ss"
-    )
-    #####
+    # groups = models.ManyToManyField(
+    #     Group,
+    #     related_name="%(app_label)s_%(class)s_related",
+    #     related_query_name="%(app_label)s_%(class)ss"
+    # )
+    # user_permissions = models.ManyToManyField(
+    #     Permission,
+    #     related_name="%(app_label)s_%(class)s_related",
+    #     related_query_name="%(app_label)s_%(class)ss"
+    # )
+    # #####
 
     class UserRole(models.TextChoices):
         ADMIN = 'admin'
