@@ -12,22 +12,12 @@ class ModelBase(models.Model):
         abstract = True
 
 class User(AbstractUser):
-    user_name = models.CharField(max_length=100)
     birthDate = models.DateField(null=True)
     address = models.CharField(max_length=128)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    avatar = models.ImageField(upload_to='uploads/%Y/%m', null=True, blank=True)
 
-    #them do loi xung dot
-    # groups = models.ManyToManyField(
-    #     Group,
-    #     related_name="%(app_label)s_%(class)s_related",
-    #     related_query_name="%(app_label)s_%(class)ss"
-    # )
-    # user_permissions = models.ManyToManyField(
-    #     Permission,
-    #     related_name="%(app_label)s_%(class)s_related",
-    #     related_query_name="%(app_label)s_%(class)ss"
-    # )
-    # #####
 
     class UserRole(models.TextChoices):
         ADMIN = 'admin'
@@ -35,18 +25,6 @@ class User(AbstractUser):
         STUDENT = 'student'
     role = models.CharField(max_length=10, choices=UserRole.choices, default=UserRole.STUDENT)
 
-
-class Student(ModelBase):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
-    avatar = models.ImageField(upload_to='uploads/%Y/%m')
-    description = models.TextField(null=True, blank=True)
-    # Các trường khác của sinh viên
-
-
-class Lecturer(ModelBase):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='lecturer_profile')
-    description = models.TextField(null=True, blank=True)
-    # Các trường khác của giảng viên
 
 class Course(ModelBase):
     name = models.CharField(max_length=100, unique=True, null=False)
@@ -64,8 +42,8 @@ class StudyClass(ModelBase):
     name = models.CharField(max_length=100, unique=True, null=False)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    students = models.ManyToManyField(Student, related_name='enrolled_classes')
-    lecturer = models.ForeignKey(Lecturer, on_delete=models.SET_NULL, null=True)
+    student = models.ManyToManyField(User, related_name='enrolled_classes')#Sinh viên
+    lecturer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)#Giang viên
 
     def __str__(self):
         return self.name
@@ -76,7 +54,7 @@ class ScoreColumn(ModelBase):
         return self.name
 
 class ResultLearning(ModelBase):
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+    student = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)#sinh vien
     study_class = models.ForeignKey(StudyClass, on_delete=models.CASCADE)
     midterm_score = models.FloatField()
     final_score = models.FloatField()
