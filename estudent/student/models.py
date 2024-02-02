@@ -16,7 +16,7 @@ class User(AbstractUser):
     address = models.CharField(max_length=128)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
-    avatar = models.ImageField(upload_to='uploads/%Y/%m', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatar/%Y/%m', null=True, blank=True)
 
 
     class UserRole(models.TextChoices):
@@ -25,10 +25,10 @@ class User(AbstractUser):
         STUDENT = 'student'
     role = models.CharField(max_length=10, choices=UserRole.choices, default=UserRole.STUDENT)
 
-
+    def __str__(self):
+        return self.last_name + " " + self.first_name
 class Course(ModelBase):
     name = models.CharField(max_length=100, unique=True, null=False)
-
     def __str__(self):
         return self.name
 
@@ -59,5 +59,5 @@ class ResultLearning(ModelBase):
     midterm_score = models.FloatField()
     final_score = models.FloatField()
     flag = models.BooleanField(default=False)#Dùng để check xem đa luu chua
-    score_column = models.ForeignKey(ScoreColumn, on_delete=models.SET_NULL, null=True)
+    score_column = models.ForeignKey(ScoreColumn, on_delete=models.SET_NULL, null=True, blank=True)
 
